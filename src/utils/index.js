@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 //返回传递给他的任意对象的类(返回：array、object、number、string)
 function typeOf(o) {
@@ -15,11 +16,11 @@ function changePx(count) {
 }
 
 // 防抖中心思想：如果频繁操作，在setTimeout未执行前就clearTimeout，则当前setTimeout就不会执行。
-function debounce (method, delay) {
+function debounce(method, delay) {
   let timer = null
   return function () {
     let self = this,
-        args = arguments
+      args = arguments
 
     timer && clearTimeout(timer)
     timer = setTimeout(function () {
@@ -33,7 +34,7 @@ function debounce (method, delay) {
 }
 
 // 节流：如果频繁操作，在setTimeout未执行前就clearTimeout，则当前setTimeout就不会执行。
-function throttle (method, duration) {
+function throttle(method, duration) {
   let timer = null
   let startTime = new Date()
 
@@ -105,7 +106,7 @@ function getStorage(key, subKey) {
 }
 
 // 判断是否是pc端
-function isPC(){
+function isPC() {
   let userAgentInfo = navigator.userAgent;
   let Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
   let flag = true;
@@ -116,7 +117,7 @@ function isPC(){
 }
 
 //设置页面rem
-function setRem (baseVal = 10) {
+function setRem(baseVal = 10) {
   const win = window
   const doc = document
 

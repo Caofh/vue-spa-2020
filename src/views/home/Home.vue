@@ -1,35 +1,32 @@
 <template>
   <div class="home">
-    <img class="img" alt="Vue logo" src="../../assets/img/home/logo.png">
+    <img class="img" alt="Vue logo" src="../../assets/img/home/logo.png" />
     <div class="test">花擦勒！</div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
-
 // import config from '@/config/gateway.config'
 // import { initAsyn } from '@/utils/loadJs'
 // import $ from 'zepto'
 // console.log($)
 // console.log(config)
 
-import { listPage } from '@/api/pages/home/home'
+import { listPage } from "@/api/pages/home/home";
 
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
+    HelloWorld,
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  created () {
+  created() {
     // initAsyn(['moment' 'eruda'], () => {
     //   console.log(moment)
     //   console.log(456)
@@ -39,29 +36,27 @@ export default {
     // console.log($)
 
     listPage().then((data) => {
-      console.log(data)
-    })
-  }
-}
+      console.log(data);
+    });
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .home {
-    color: #ccc;
+.home {
+  color: #ccc;
 
-    .img {
-      width: 400px;
-      height: 400px;
-    }
-
-    .test {
-      width: 100%;
-      height: 200px;
-      @include font-all(20px, $color-font);
-
-      transform: scale(2);
-    }
+  .img {
+    width: 400px;
+    height: 400px;
   }
 
+  .test {
+    width: 100%;
+    height: 200px;
+    @include font-all(20px, $color-font);
 
+    transform: scale(2);
+  }
+}
 </style>

@@ -1,4 +1,6 @@
 
+/* eslint-disable */
+
 import { sourceJs } from "@/config/base.config"; // 页面需要动态加载js文件
 
 const win = window
@@ -20,7 +22,7 @@ const tools = {
    *  @param option.fatherDom 	所创建dom放在哪个父级元素里（不指定父元素，则默认加在head里）
    *  @param option.callback		dom创建完成后执行的回调
    */
-  creatDom (option) {
+  creatDom(option) {
     let attrs = option.attrs;
     var script = document.createElement('script');
     let callBack = option.callBack
