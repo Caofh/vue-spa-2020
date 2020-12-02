@@ -156,6 +156,69 @@ function initAsyn(jsList = [], callback) {
 
 }
 
+/*
+ initAsyn的promise版本
+*/
+function initAsyn_promise(jsList = []) {
+
+  return new Promise((resolve, reject) => {
+
+    // js加载列表
+    let concatJsListArr = []
+
+    jsList.map((item) => {
+      if (tools.typeOf(item) === 'string') {
+        // 禁止页面重复加载第三方js逻辑
+        if (!sourceJs[item].global || !window[sourceJs[item].global]) {
+
+          // 个人设置全局插件变量，避免重复加载
+          if (!window[sourceJs[item].selfAddGlobal]) {
+            concatJsListArr.push(sourceJs[item])
+
+            if (sourceJs[item].selfAddGlobal) {
+              window[sourceJs[item].selfAddGlobal] = sourceJs[item].selfAddGlobal
+            }
+
+          }
+
+        }
+      } else if (tools.typeOf(item) === 'object') {
+        // 禁止页面重复加载第三方js逻辑
+        if (!item.global || !window[item.global]) {
+          concatJsListArr.push(item)
+        }
+      } else if (tools.typeOf(item) === 'array') {
+        concatJsListArr = [].concat(concatJsListArr, item)
+
+        // 禁止页面重复加载第三方js逻辑
+        concatJsListArr.map((item, index) => {
+
+          if (!item.global || !window[item.global]) {
+            console.log(`加载cdn资源列表中存在已经加载过的plugin：${item}，已从加载列表中删除`)
+            concatJsListArr.splice(index, 1)
+          }
+
+        })
+      }
+    })
+
+    // 加载所有对应的js
+    if (concatJsListArr.length) {
+      tools.loadJs(concatJsListArr, () => {
+        // 所有js加载完毕后的回调
+        console.log('自定义动态js加载完毕(本次动态加载' + jsList.length + '个js):', jsList)
+        resolve()
+      })
+    } else {
+      resolve()
+    }
+
+
+  })
+
+}
+
 export {
   initAsyn,
+  initAsyn_promise,
 }
