@@ -27,7 +27,7 @@
     },
   }
 */
-import { sourceJs, sourceCss } from "./base.config"; // 页面需要动态加载js文件，资源合集
+import { sourceJs, sourceCss } from "@/base.config"; // 页面需要动态加载js文件，资源合集
 
 const win = window
 const doc = document
