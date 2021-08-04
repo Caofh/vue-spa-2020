@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 /*
   // 需要的第三方插件url集合,js资源结构
@@ -27,10 +28,10 @@
     },
   }
 */
-import { sourceJs, sourceCss } from "@/base.config"; // 页面需要动态加载js文件，资源合集
+import { sourceJs, sourceCss } from "@/config/base.config"; // 页面需要动态加载js文件，资源合集
 
-const win = window
-const doc = document
+const win = window;
+const doc = document;
 
 //工具类方法集合
 const tools = {
@@ -48,117 +49,107 @@ const tools = {
    *  @param option.fatherDom 	所创建dom放在哪个父级元素里（不指定父元素，则默认加在head里）
    *  @param option.callback		dom创建完成后执行的回调
    */
+
   creatDom(option) {
     let attrs = option.attrs;
-    var script = document.createElement('script');
-    let callBack = option.callBack
+    var script = document.createElement("script");
+    let callBack = option.callBack;
 
-    script.type = 'text/javascript';
-    script.src = attrs.url
+    script.type = "text/javascript";
+    script.src = attrs.url;
     //重点！！！！script加载成功
     script.onload = function () {
       callBack && callBack();
-
     };
-    var head = document.getElementsByTagName('head')[0];
+    var head = document.getElementsByTagName("head")[0];
     (head || document.body).appendChild(script);
-
   },
   creatDomCss(option) {
     let attrs = option.attrs;
-    var link = document.createElement('link');
-    let callBack = option.callBack
+    var link = document.createElement("link");
+    let callBack = option.callBack;
 
-    link.rel = 'stylesheet';
-    link.href = attrs.url
+    link.rel = "stylesheet";
+    link.href = attrs.url;
     //重点！！！！script加载成功
     link.onload = function () {
       callBack && callBack();
-
     };
-    var head = document.getElementsByTagName('head')[0];
+    var head = document.getElementsByTagName("head")[0];
     (head || document.body).appendChild(link);
-
   },
 
   loadJs(urls, callback) {
-
-    const maxI = urls.length // 加载js的数量
-    let jsDone = false // 所有js加载状态
-    let curI = 0 // 加载js的当前索引
+    const maxI = urls.length; // 加载js的数量
+    let jsDone = false; // 所有js加载状态
+    let curI = 0; // 加载js的当前索引
 
     //每个js加载完成后的回调
     const loadCallback = (res) => {
-      const curUrl = urls[curI]
-      tools.typeOf(curUrl) === 'object' && curUrl.isLoad && this.creatDom({
-        dom: 'script',
-        attrs: {
-          name: curUrl.name || 'js',
-          // html: res,
-          url: curUrl.src,
-          async: curUrl.async,
-        },
-        callBack: function () {
+      const curUrl = urls[curI];
+      tools.typeOf(curUrl) === "object" &&
+        curUrl.isLoad &&
+        this.creatDom({
+          dom: "script",
+          attrs: {
+            name: curUrl.name || "js",
+            // html: res,
+            url: curUrl.src,
+            async: curUrl.async
+          },
+          callBack: function () {
+            jsDone = curI === maxI - 1;
+            callback && jsDone && callback();
 
-          jsDone = curI === maxI - 1
-          callback && jsDone && callback()
-
-          //开始加载下一个
-          curI++
-          (curI < maxI) && loadFn(urls[curI])
-
-        }
-      })
-
-    }
+            //开始加载下一个
+            curI++;
+            curI < maxI && loadFn(urls[curI]);
+          }
+        });
+    };
 
     const loadFn = (curJsData) => {
-      loadCallback(curJsData)
-    }
+      loadCallback(curJsData);
+    };
 
-    loadFn(urls[curI])
-
+    loadFn(urls[curI]);
   },
 
   loadCss(urls, callback) {
-
-    const maxI = urls.length // 加载js的数量
-    let jsDone = false // 所有js加载状态
-    let curI = 0 // 加载js的当前索引
+    const maxI = urls.length; // 加载js的数量
+    let jsDone = false; // 所有js加载状态
+    let curI = 0; // 加载js的当前索引
 
     //每个js加载完成后的回调
     const loadCallback = (res) => {
-      const curUrl = urls[curI]
-      tools.typeOf(curUrl) === 'object' && curUrl.isLoad && this.creatDomCss({
-        dom: 'link',
-        attrs: {
-          name: curUrl.name || 'css',
-          url: curUrl.src,
-          async: curUrl.async,
-        },
-        callBack: function () {
+      const curUrl = urls[curI];
+      tools.typeOf(curUrl) === "object" &&
+        curUrl.isLoad &&
+        this.creatDomCss({
+          dom: "link",
+          attrs: {
+            name: curUrl.name || "css",
+            url: curUrl.src,
+            async: curUrl.async
+          },
+          callBack: function () {
+            jsDone = curI === maxI - 1;
+            callback && jsDone && callback();
 
-          jsDone = curI === maxI - 1
-          callback && jsDone && callback()
-
-          //开始加载下一个
-          curI++
-          (curI < maxI) && loadFn(urls[curI])
-
-        }
-      })
-
-    }
+            //开始加载下一个
+            curI++;
+            curI < maxI && loadFn(urls[curI]);
+          }
+        });
+    };
 
     const loadFn = (curJsData) => {
-      loadCallback(curJsData)
-    }
+      loadCallback(curJsData);
+    };
 
-    loadFn(urls[curI])
-
-  },
-
-}
+    loadFn(urls[curI]);
+  }
+};
 
 /* 自定义动态加载js方法(支持jsList:字符串、对象、数组)，示例如下
   initAsyn([
@@ -196,106 +187,103 @@ const tools = {
   })
 */
 function initAsyn(jsList = [], callback) {
-
   // js加载列表
-  let concatJsListArr = []
+  let concatJsListArr = [];
 
   jsList.map((item) => {
-    if (tools.typeOf(item) === 'string') {
+    if (tools.typeOf(item) === "string") {
       // 禁止页面重复加载第三方js逻辑
       if (!sourceJs[item].global || !window[sourceJs[item].global]) {
-        concatJsListArr.push(sourceJs[item])
+        concatJsListArr.push(sourceJs[item]);
       }
-    } else if (tools.typeOf(item) === 'object') {
+    } else if (tools.typeOf(item) === "object") {
       // 禁止页面重复加载第三方js逻辑
       if (!item.global || !window[item.global]) {
-        concatJsListArr.push(item)
+        concatJsListArr.push(item);
       }
-    } else if (tools.typeOf(item) === 'array') {
-      concatJsListArr = [].concat(concatJsListArr, item)
+    } else if (tools.typeOf(item) === "array") {
+      concatJsListArr = [].concat(concatJsListArr, item);
 
       // 禁止页面重复加载第三方js逻辑
       concatJsListArr.map((item) => {
-        return !item.global || !window[item.global]
-      })
+        return !item.global || !window[item.global];
+      });
     }
-  })
+  });
 
   // 加载所有对应的js
   if (concatJsListArr.length) {
     tools.loadJs(concatJsListArr, () => {
       // 所有js加载完毕后的回调
       if (callback) {
-        console.log('自定义动态js加载完毕(本次动态加载' + jsList.length + '个js):', jsList)
-        callback()
+        console.log(
+          "自定义动态js加载完毕(本次动态加载" + jsList.length + "个js):",
+          jsList
+        );
+        callback();
       }
-    })
+    });
   } else {
-    callback && callback()
+    callback && callback();
   }
-
 }
 
 /*
  initAsyn的promise版本
 */
 function initAsyn_promise(jsList = []) {
-
   return new Promise((resolve, reject) => {
-
     // js加载列表
-    let concatJsListArr = []
+    let concatJsListArr = [];
 
     jsList.map((item) => {
-      if (tools.typeOf(item) === 'string') {
+      if (tools.typeOf(item) === "string") {
         // 禁止页面重复加载第三方js逻辑
         if (!sourceJs[item].global || !window[sourceJs[item].global]) {
-
           // 个人设置全局插件变量，避免重复加载
           if (!window[sourceJs[item].selfAddGlobal]) {
-            concatJsListArr.push(sourceJs[item])
+            concatJsListArr.push(sourceJs[item]);
 
             if (sourceJs[item].selfAddGlobal) {
-              window[sourceJs[item].selfAddGlobal] = sourceJs[item].selfAddGlobal
+              window[sourceJs[item].selfAddGlobal] =
+                sourceJs[item].selfAddGlobal;
             }
-
           }
-
         }
-      } else if (tools.typeOf(item) === 'object') {
+      } else if (tools.typeOf(item) === "object") {
         // 禁止页面重复加载第三方js逻辑
         if (!item.global || !window[item.global]) {
-          concatJsListArr.push(item)
+          concatJsListArr.push(item);
         }
-      } else if (tools.typeOf(item) === 'array') {
-        concatJsListArr = [].concat(concatJsListArr, item)
+      } else if (tools.typeOf(item) === "array") {
+        concatJsListArr = [].concat(concatJsListArr, item);
 
         // 禁止页面重复加载第三方js逻辑
         concatJsListArr.map((item, index) => {
-
           if (!item.global || !window[item.global]) {
-            console.log(`加载cdn资源列表中存在已经加载过的plugin：${item}，已从加载列表中删除`)
-            concatJsListArr.splice(index, 1)
+            console.log(
+              `加载cdn资源列表中存在已经加载过的plugin：${item}，已从加载列表中删除`
+            );
+            concatJsListArr.splice(index, 1);
           }
-
-        })
+        });
       }
-    })
+    });
 
     // 加载所有对应的js
     if (concatJsListArr.length) {
       tools.loadJs(concatJsListArr, () => {
         // 所有js加载完毕后的回调
-        console.log('自定义动态js加载完毕(本次动态加载' + jsList.length + '个js):', jsList)
-        resolve()
-      })
+        console.log(
+          "自定义动态js加载完毕(本次动态加载" + jsList.length + "个js):",
+          jsList
+        );
+        resolve();
+      });
     } else {
-      resolve()
+      resolve();
     }
-
-
-  })
-
+  });
 }
 
 /* 自定义动态加载css方法(支持jsList:字符串、对象、数组)，示例如下
@@ -332,95 +320,90 @@ function initAsyn_promise(jsList = []) {
   })
 */
 function initAsynCss(cssList = [], callback) {
-
   // css加载列表
-  let concatCssListArr = []
+  let concatCssListArr = [];
 
   cssList.map((item) => {
-    if (tools.typeOf(item) === 'string') {
+    if (tools.typeOf(item) === "string") {
       // 禁止页面重复加载第三方js逻辑
       if (!sourceCss[item].global || !window[sourceCss[item].global]) {
-        concatCssListArr.push(sourceCss[item])
+        concatCssListArr.push(sourceCss[item]);
       }
-    } else if (tools.typeOf(item) === 'object') {
+    } else if (tools.typeOf(item) === "object") {
       // 禁止页面重复加载第三方js逻辑
       if (!item.global || !window[item.global]) {
-        concatCssListArr.push(item)
+        concatCssListArr.push(item);
       }
-    } else if (tools.typeOf(item) === 'array') {
-      concatCssListArr = [].concat(concatCssListArr, item)
+    } else if (tools.typeOf(item) === "array") {
+      concatCssListArr = [].concat(concatCssListArr, item);
 
       // 禁止页面重复加载第三方js逻辑
       concatCssListArr.map((item) => {
-        return !item.global || !window[item.global]
-      })
+        return !item.global || !window[item.global];
+      });
     }
-  })
+  });
 
   // 加载所有对应的js
   if (concatCssListArr.length) {
     tools.loadCss(concatCssListArr, () => {
       // 所有js加载完毕后的回调
       if (callback) {
-        console.log('自定义动态js加载完毕(本次动态加载' + cssList.length + '个js):', cssList)
-        callback()
+        console.log(
+          "自定义动态js加载完毕(本次动态加载" + cssList.length + "个js):",
+          cssList
+        );
+        callback();
       }
-    })
+    });
   } else {
-    callback && callback()
+    callback && callback();
   }
-
 }
 
 /*
  initAsynCss的promise版本
 */
 function initAsynCss_promise(cssList = []) {
-
   return new Promise((resolve, reject) => {
-
     // js加载列表
-    let concatCssListArr = []
+    let concatCssListArr = [];
 
     cssList.map((item) => {
-      if (tools.typeOf(item) === 'string') {
+      if (tools.typeOf(item) === "string") {
         // 禁止页面重复加载第三方js逻辑
         if (!sourceCss[item].global || !window[sourceCss[item].global]) {
-          concatCssListArr.push(sourceCss[item])
+          concatCssListArr.push(sourceCss[item]);
         }
-      } else if (tools.typeOf(item) === 'object') {
+      } else if (tools.typeOf(item) === "object") {
         // 禁止页面重复加载第三方js逻辑
         if (!item.global || !window[item.global]) {
-          concatCssListArr.push(item)
+          concatCssListArr.push(item);
         }
-      } else if (tools.typeOf(item) === 'array') {
-        concatCssListArr = [].concat(concatCssListArr, item)
+      } else if (tools.typeOf(item) === "array") {
+        concatCssListArr = [].concat(concatCssListArr, item);
 
         // 禁止页面重复加载第三方js逻辑
         concatCssListArr.map((item) => {
-          return !item.global || !window[item.global]
-        })
+          return !item.global || !window[item.global];
+        });
       }
-    })
+    });
 
     // 加载所有对应的js
     if (concatCssListArr.length) {
       tools.loadCss(concatCssListArr, () => {
         // 所有js加载完毕后的回调
-        console.log('自定义动态js加载完毕(本次动态加载' + cssList.length + '个js):', cssList)
-        resolve()
-      })
+        console.log(
+          "自定义动态js加载完毕(本次动态加载" + cssList.length + "个js):",
+          cssList
+        );
+        resolve();
+      });
     } else {
-      resolve()
+      resolve();
     }
-
-  })
-
+  });
 }
 
-export {
-  initAsyn,
-  initAsyn_promise,
-  initAsynCss,
-  initAsynCss_promise,
-}
+export { initAsyn, initAsyn_promise, initAsynCss, initAsynCss_promise };
